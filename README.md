@@ -116,11 +116,3 @@ pip install -r requirements.txt
 | CNN (5×5) | ~255K | ~91% | ~0.26 |
 
 **Conclusion:** CNNs achieve better accuracy with similar complexity to the baseline MLP, demonstrating the effectiveness of convolutional inductive bias for visual data.
-
-##  Important Notes
-
-- **Don't follow recipes**: The CNN architecture was designed from scratch with explicit justifications
-- **Controlled experiments**: Only vary one variable (kernel size) while keeping everything else constant
-- **Deep interpretation**: Section 5 requires answers in your own words, not copied
-- **Appropriate dataset**: Fashion-MNIST is ideal for CNNs due to its spatial structure and translation invariance
-
