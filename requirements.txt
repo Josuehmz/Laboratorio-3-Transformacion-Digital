@@ -1,9 +1,10 @@
-# Laboratorio 3 - Transformación Digital
-# Redes convolucionales y EDA
+# Lab 3 - Convolutional networks and EDA
+# Minimal deps to avoid Windows long-path issues (no full jupyter/jupyterlab)
 
-jupyter>=1.0.0
 numpy>=1.24
 matplotlib>=3.7
 seaborn>=0.12
 pandas>=2.0
 tensorflow>=2.13
+notebook>=7.0
+ipykernel>=6.0

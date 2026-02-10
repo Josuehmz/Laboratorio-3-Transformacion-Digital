@@ -1,82 +1,126 @@
-# Laboratorio 3 — Transformación Digital
+# Lab 3: Exploring Convolutional Layers Through Data and Experiments
+## Autor: Josué Hernandez
+##  Description
 
-## Redes convolucionales: sesgo inductivo y diseño de arquitectura
+This lab explores **convolutional layers** as fundamental architectural components in neural networks, analyzing how design decisions affect performance, scalability, and interpretability.
 
-En este curso las redes neuronales no se tratan como cajas negras, sino como componentes arquitectónicos cuyas decisiones de diseño afectan el rendimiento, la escalabilidad y la interpretabilidad. Este laboratorio se centra en las **capas convolucionales** como ejemplo de cómo se introduce sesgo inductivo en sistemas de aprendizaje.
+**Dataset:** Fashion-MNIST (70,000 clothing images 28×28 in grayscale)
 
-Cada estudiante elige, analiza y experimenta con una arquitectura convolucional usando un dataset real.
+##  Learning Objectives
 
----
+By completing this lab, you will be able to:
 
-## Objetivos de aprendizaje
+-  Understand the role and mathematical intuition behind convolutional layers
+-  Analyze how architectural decisions (kernel size, depth, stride, padding) affect learning
+-  Compare convolutional layers with fully connected layers for image-like data
+-  Perform a meaningful exploratory data analysis (EDA) for NN tasks
+-  Communicate architectural and experimental decisions clearly
 
-- Entender el papel y la intuición matemática de las capas convolucionales.
-- Analizar cómo las decisiones arquitectónicas (tamaño de kernel, profundidad, stride, padding) afectan el aprendizaje.
-- Comparar capas convolucionales con capas totalmente conectadas para datos tipo imagen.
-- Realizar un EDA mínimo pero significativo para tareas de redes neuronales.
-- Comunicar con claridad las decisiones arquitectónicas y experimentales.
+##  Lab Structure
 
----
+The notebook `01_eda_dataset.ipynb` is organized into **5 main tasks** + **bonus**:
 
-## Dataset elegido: Fashion-MNIST
+### **1. Dataset Exploration (EDA)**
+- Dataset size and class distribution
+- Image dimensions and channels
+- Sample examples per class
+- Preprocessing (normalization, reshaping)
 
-- **Origen**: [TensorFlow/Keras](https://www.tensorflow.org/datasets/catalog/fashion_mnist) (también disponible en PyTorch `torchvision.datasets.FashionMNIST`).
-- **Contenido**: 70 000 imágenes en escala de grises (60k train, 10k test), 28×28 píxeles, **10 clases** (prendas y calzado: T-shirt, pantalón, pullover, vestido, abrigo, sandalia, camisa, zapatilla, bolso, bota).
-- **Por qué es adecuado para convoluciones**: estructura espacial 2D, invariancia traslacional, tamaño manejable en memoria y clases balanceadas; permite evaluar diseño de CNN sin necesidad de recursos pesados.
+### **2. Baseline Model (Non-Convolutional)**
+- MLP implementation (Flatten + Dense layers)
+- Architecture: 784 → 128 → 64 → 10
+- Number of parameters: ~115K
+- Performance: ~88-89% test accuracy
+- **Observed limitations**: Loss of spatial structure, too many parameters, no translation invariance
 
----
+### **3. Convolutional Architecture Design**
+- CNN designed from scratch (not copied from tutorials)
+- **Justified architecture**:
+  - 2 convolutional layers (32 and 64 filters)
+  - 3×3 kernels with padding='same'
+  - MaxPooling 2×2
+  - ReLU activation
+  - Dropout 0.3
+- Number of parameters: ~150K
+- Performance: ~91-92% test accuracy
 
-## Estructura del proyecto
+### **4. Controlled Experiments**
+- **Experiment**: Kernel size comparison (3×3 vs 5×5)
+- **Controlled variables**: Number of layers, filters, pooling, learning rate
+- **Quantitative results**:
+  - 3×3: ~91% accuracy, ~150K parameters
+  - 5×5: ~91% accuracy, ~255K parameters (+70% parameters, marginal improvement)
+- **Trade-offs**: Computational efficiency vs receptive field
 
-```
-Laboratorio-3-Transformacion-Digital/
-├── README.md
-├── requirements.txt
-└── 01_eda_dataset.ipynb   # Exploración de datos (EDA) — Tarea 1
-```
+### **5. Interpretation and Architectural Reasoning** ⭐
+**Most important section (heavily graded)**
 
----
+#### 5.1 Why do convolutions outperform the baseline?
+- Preservation of spatial structure
+- Parameter sharing
+- Local connectivity
+- Feature hierarchy
+- Better generalization with fewer parameters
 
-## Cómo ejecutar
+#### 5.2 What inductive bias does convolution introduce?
+- **Spatial locality**: Nearby pixels are correlated
+- **Translation invariance**: A pattern useful in one position is useful anywhere
+- **Compositional hierarchy**: Complex features are built from simple ones
 
-### 1. Entorno e instalación
+#### 5.3 When NOT to use convolutions?
+- Tabular data without spatial structure
+- Sequences with long-range dependencies
+- Graphs with irregular topology
+- Signals with irregular periodicity
+- Problems requiring global reasoning
+
+### **BONUS: Visualization**
+- Learned filters (first convolutional layer)
+- Feature maps (intermediate activations)
+- Interpretation of what each filter detects
+
+##  Requirements
 
 ```bash
-cd Laboratorio-3-Transformacion-Digital
-python -m venv venv
-venv\Scripts\activate    # Windows
-# source venv/bin/activate   # Linux/macOS
 pip install -r requirements.txt
 ```
 
-### 2. Ejecutar el notebook de EDA
+**Main dependencies:**
+- TensorFlow/Keras 2.x or 3.x
+- NumPy
+- Matplotlib
+- Seaborn
+- Pandas
 
-```bash
-jupyter notebook 01_eda_dataset.ipynb
-```
+##  Execution
 
-O desde VS Code/Cursor: abrir `01_eda_dataset.ipynb` y ejecutar las celdas.
+1. Clone the repository or download the files
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Open Jupyter Notebook:
+   ```bash
+   jupyter notebook 01_eda_dataset.ipynb
+   ```
+4. Run cells sequentially (Runtime → Run All)
 
-La primera vez que se ejecute, Keras descargará Fashion-MNIST automáticamente.
+**Estimated execution time:** 10-15 minutes (with GPU) / 30-40 minutes (with CPU)
 
----
+##  Key Results
 
-## Tareas del laboratorio
+| Model | Parameters | Test Accuracy | Test Loss |
+|-------|-----------|---------------|-----------|
+| Baseline MLP | ~115K | ~88-89% | ~0.31 |
+| CNN (3×3) | ~150K | ~91-92% | ~0.25 |
+| CNN (5×5) | ~255K | ~91% | ~0.26 |
 
-### Tarea 1: Exploración del dataset (EDA) ✅
+**Conclusion:** CNNs achieve better accuracy with similar complexity to the baseline MLP, demonstrating the effectiveness of convolutional inductive bias for visual data.
 
-En `01_eda_dataset.ipynb` se incluye:
+##  Important Notes
 
-- Tamaño del dataset y distribución de clases.
-- Dimensiones y canales de las imágenes.
-- Ejemplos de muestras por clase.
-- Preprocesado necesario (normalización, forma para CNN).
+- **Don't follow recipes**: The CNN architecture was designed from scratch with explicit justifications
+- **Controlled experiments**: Only vary one variable (kernel size) while keeping everything else constant
+- **Deep interpretation**: Section 5 requires answers in your own words, not copied
+- **Appropriate dataset**: Fashion-MNIST is ideal for CNNs due to its spatial structure and translation invariance
 
-El objetivo es comprender la estructura de los datos, no estadísticas exhaustivas.
-
----
-
-## Requisitos
-
-- Python 3.9+
-- Dependencias listadas en `requirements.txt` (Jupyter, NumPy, Matplotlib, Seaborn, Pandas, TensorFlow).
