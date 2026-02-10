@@ -116,3 +116,16 @@ pip install -r requirements.txt
 | CNN (5×5) | ~255K | ~91% | ~0.26 |
 
 **Conclusion:** CNNs achieve better accuracy with similar complexity to the baseline MLP, demonstrating the effectiveness of convolutional inductive bias for visual data.
+
+## ☁️ Cloud Deployment Attempt
+
+An attempt was made to deploy the trained model to **AWS SageMaker** for production inference. The deployment pipeline includes:
+
+- **Training Script** (`sagemaker/train.py`): SageMaker-compatible training job
+- **Inference Handler** (`sagemaker/inference.py`): Real-time prediction endpoint
+- **Deployment Pipeline** (`sagemaker/deploy.py`): Automated deployment to SageMaker endpoint
+- **Testing Suite** (`sagemaker/test_endpoint.py`): Endpoint validation
+- **Cleanup Tools** (`sagemaker/cleanup.py`): Resource management
++
+**Issue:** IAM role permission error prevented successful deployment.
+
