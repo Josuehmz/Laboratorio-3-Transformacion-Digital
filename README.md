@@ -1,5 +1,5 @@
 # Lab 3: Exploring Convolutional Layers Through Data and Experiments
-## Autor: Josué Hernandez
+## By: Josué Hernandez
 ##  Description
 
 This lab explores **convolutional layers** as fundamental architectural components in neural networks, analyzing how design decisions affect performance, scalability, and interpretability.
